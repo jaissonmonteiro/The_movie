@@ -1,4 +1,4 @@
-# the_movie
+# The_movie
 Desafio de desenvolver uma aplicação iOS com a linguagem Swift e SwiftUI. 
 
 
