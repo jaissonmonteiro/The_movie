@@ -10,6 +10,9 @@ import SwiftUI
 
 struct MovieDetailsScreen: View {
     
+    @ObservedObject var services: MovieDetailsScreenService = MovieDetailsScreenService()
+    let movieId = 299536
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
@@ -23,7 +26,7 @@ struct MovieDetailsScreen: View {
                         MovieDetailsImageView()
                             .frame(width: geometry.size.width, height: geometry.size.height / 2.3)
                         
-                        MovieDetailsHeaderView()
+                        MovieDetailsHeaderView(title: self.services.movieDetails?.original_title)
                             .background(Color.black.shadow(color: Color.black, radius: 30, x: 0, y: -20))
                         
                         VStack(spacing: 0) {
@@ -45,6 +48,9 @@ struct MovieDetailsScreen: View {
                 
             }
             .foregroundColor(Color.white)
+        }
+        .onAppear {
+            self.services.getMovieDetails(for: self.movieId)
         }
     }
 }

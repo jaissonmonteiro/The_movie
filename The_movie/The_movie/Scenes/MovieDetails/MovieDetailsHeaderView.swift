@@ -11,11 +11,16 @@ import SwiftUI
 struct MovieDetailsHeaderView: View {
     
     @State var like: Bool = true
+    let title: String
+    
+    init(title: String? = nil) {
+        self.title = title ?? ""
+    }
     
     var body: some View {
         VStack(spacing: 8) {
             HStack(alignment: .top, spacing: 16) {
-                Text("Nome do filme escolhido")
+                Text(self.title)
                     .font(Font.system(size: 30))
                     .fontWeight(.bold)
                 
