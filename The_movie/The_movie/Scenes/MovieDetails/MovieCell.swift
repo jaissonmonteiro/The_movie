@@ -9,20 +9,30 @@
 import SwiftUI
 
 struct MovieCell: View {
+    
+    @ObservedObject var services = MovieCellService()
+    private let movieId: Int
+    
+    init(for movieId: Int) {
+        self.movieId = movieId
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             HStack(alignment: .top) {
                 HStack(spacing: 16) {
-                    Image("movie")
+                    Image(uiImage: self.services.image ?? UIImage())
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .foregroundColor(Color.gray)
                         .frame(width: geometry.size.width / 5, height: geometry.size.height)
                     
                     VStack(alignment: .leading) {
-                        Text("Nome do filme")
+                        Text(self.services.movieDetails?.original_title ?? "")
                             .fontWeight(.bold)
-                        Text("ano genero, genero")
+                        
+                        Text(self.services.movieDetails?.genres.map({$0.name}).joined(separator: ", ") ?? "")
+                
                     }
                 }
                 Spacer()
@@ -31,12 +41,15 @@ struct MovieCell: View {
             }
             .foregroundColor(Color.white)
         }
+        .onAppear {
+            self.services.getMovieDetails(for: self.movieId)
+        }
     }
 }
 
 struct MovieListCell_Previews: PreviewProvider {
     static var previews: some View {
-        MovieCell()
+        MovieCell(for: 0)
             .background(Color.black)
             .previewLayout(.fixed(width: 300, height: 70))
     }

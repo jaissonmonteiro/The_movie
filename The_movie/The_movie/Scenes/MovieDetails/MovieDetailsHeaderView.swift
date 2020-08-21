@@ -11,16 +11,16 @@ import SwiftUI
 struct MovieDetailsHeaderView: View {
     
     @State var like: Bool = true
-    let title: String
+    private let movie: MovieDetailsModel?
     
-    init(title: String? = nil) {
-        self.title = title ?? ""
+    init(for movie: MovieDetailsModel? = nil) {
+        self.movie = movie
     }
     
     var body: some View {
         VStack(spacing: 8) {
             HStack(alignment: .top, spacing: 16) {
-                Text(self.title)
+                Text(self.movie?.original_title ?? "")
                     .font(Font.system(size: 30))
                     .fontWeight(.bold)
                 
@@ -38,13 +38,12 @@ struct MovieDetailsHeaderView: View {
             HStack(spacing: 20) {
                 HStack {
                     Image(systemName: "heart.fill")
-                    Text("1.2k Likes")
+                    Text("\(self.movie?.vote_count ?? 0) Likes")
                 }
                 
                 HStack {
                     Image(systemName: "p.circle.fill")
-                    Text("Popularity views")
-                    
+                    Text(String(format: "%.2f Views", self.movie?.popularity ?? 0))
                 }
                 
                 Spacer()

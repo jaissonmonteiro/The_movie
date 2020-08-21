@@ -1,5 +1,5 @@
 //
-//  MovieDetailsScreenService.swift
+//  MovieCellService.swift
 //  The_movie
 //
 //  Created by  Jaisson Monteiro on 20/08/20.
@@ -9,12 +9,10 @@
 import Foundation
 import UIKit
 
-class MovieDetailsScreenService: ObservableObject {
+class MovieCellService: ObservableObject {
     
-    @Published var movieDetails: MovieDetailsModel?
     @Published var image: UIImage?
-    @Published var similarMovies: SimilarMoviesModel?
-    
+    @Published var movieDetails: MovieDetailsModel?
     private let movieService = MovieService()
     
     func getMovieDetails(for movieId: Int) {
@@ -38,22 +36,6 @@ class MovieDetailsScreenService: ObservableObject {
         self.movieService.getImage(for: posterPath) { image in
             DispatchQueue.main.async {
                 self.image = image
-            }
-        }
-    }
-    
-    func getSimilarMovies(for movieId: Int) {
-        self.movieService.getSimilarMovies(for: movieId) { response in
-            switch response {
-            case .success(let networkResponse):
-                
-                DispatchQueue.main.async {
-                    self.similarMovies = networkResponse.getData()
-                    
-                }
-                
-            case .failure(let message):
-                print(message)
             }
         }
     }

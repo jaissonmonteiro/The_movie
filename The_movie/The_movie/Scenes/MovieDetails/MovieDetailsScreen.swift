@@ -11,7 +11,7 @@ import SwiftUI
 struct MovieDetailsScreen: View {
     
     @ObservedObject var services: MovieDetailsScreenService = MovieDetailsScreenService()
-    let movieId = 299536
+    let movieId = 9738
     
     var body: some View {
         GeometryReader { geometry in
@@ -23,15 +23,15 @@ struct MovieDetailsScreen: View {
                 ScrollView {
                     VStack(spacing: 0) {
                         
-                        MovieDetailsImageView()
+                        MovieDetailsImageView(image: self.services.image)
                             .frame(width: geometry.size.width, height: geometry.size.height / 2.3)
                         
-                        MovieDetailsHeaderView(title: self.services.movieDetails?.original_title)
+                        MovieDetailsHeaderView(for: self.services.movieDetails)
                             .background(Color.black.shadow(color: Color.black, radius: 30, x: 0, y: -20))
                         
                         VStack(spacing: 0) {
-                            ForEach(0..<10) {_ in
-                                MovieCell()
+                            ForEach(self.services.similarMovies?.results ?? []) {similarMovie in
+                                MovieCell(for: similarMovie.id)
                                     .frame(height: geometry.size.width / 4)
                                     .padding()
                             }
@@ -39,18 +39,22 @@ struct MovieDetailsScreen: View {
                     }
                 }
                 
-                
-                Image(systemName: "chevron.left.circle.fill")
+                Image("arrow")
                     .resizable()
                     .frame(width: geometry.size.width / 12, height: geometry.size.width / 12)
                     .foregroundColor(Color.black)
                     .padding()
+                    .opacity(0.8)
+                    .onTapGesture {
+                        print("voltar")
+                    }
                 
             }
             .foregroundColor(Color.white)
         }
         .onAppear {
             self.services.getMovieDetails(for: self.movieId)
+            self.services.getSimilarMovies(for: self.movieId)
         }
     }
 }
